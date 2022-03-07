@@ -9,7 +9,7 @@ datetime=time.strftime("%b %d", time.localtime())
 weekday=time.strftime("%a",time.localtime())            #检测今天是星期几
 weekdayDisplay=time.strftime("%A",time.localtime()) 
 
-#print(weekday)
+#print(weekday) 
 
 moveDir=r'older_versions/'
 sourceDir=r'older_versions/master/'
@@ -129,8 +129,8 @@ def main():
         moveFile="\n"
         LastDisplay = Last(imageDir,moveFile)
             
-    copyFile()
-    LastDisplay()
+    copyFile
+    LastDisplay
     exit()
     
     
