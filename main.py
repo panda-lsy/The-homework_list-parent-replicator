@@ -52,7 +52,7 @@ def day_check(weekday, weekdayDisplay):                 #检测今天日期，�
         if waiting=="false":
             break
 
-Checkdate = day_check(weekday, weekdayDisplay)
+
 
 #移动
 
@@ -76,8 +76,6 @@ def move_old_file(datetime, moveDir, listDir, moveFilelist):
                     moveFilelist=moveFilelist.append(moveFile)
                     
 
-moveFiles = move_old_file(datetime, moveDir, listDir, moveFilelist)
-
 #复制
 def copy_new_file(datetime, sourceDir, targetDir):
     for files in os.listdir(sourceDir):
@@ -86,7 +84,7 @@ def copy_new_file(datetime, sourceDir, targetDir):
             shutil.copy(sourceDir+"master.docx",targetDir)
             os.rename(targetDir+"master.docx",str(datetime)+".docx")
 
-copyFile = copy_new_file(datetime, sourceDir, targetDir)
+
 
 
 
@@ -111,26 +109,27 @@ def Last(imageDir, moveFile):
     
 def main():
     
-    Checkdate
+    day_check(weekday, weekdayDisplay)
     
 
     for listfiles in os.listdir(listDir):
         print(listfiles)
         if listfiles.find('.docx')>0 and iffilemove=="true":
-            moveFiles()                      #如果docx数量＞0,则移动旧文件
+            move_old_file(datetime, moveDir, listDir, moveFilelist)                      #如果docx数量＞0,则移动旧文件
         else:
             iffilemove="false"
     
+    
+            
+    copy_new_file(datetime, sourceDir, targetDir)
+
     if iffilemove == 'true':
     
-        LastDisplay = Last(imageDir, moveFile)
+        Last(imageDir, moveFile)
     
     if iffilemove == 'false':
         moveFile="\n"
-        LastDisplay = Last(imageDir,moveFile)
-            
-    copyFile
-    LastDisplay
+        Last(imageDir,moveFile)
     exit()
     
     
