@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*- 
 import os
 import shutil
 import easygui as g
@@ -9,7 +10,7 @@ datetime=time.strftime("%b %d", time.localtime())
 weekday=time.strftime("%a",time.localtime())            #检测今天是星期几
 weekdayDisplay=time.strftime("%A",time.localtime()) 
 
-#print(weekday) 
+#print(weekday)
 
 moveDir=r'older_versions/'
 sourceDir=r'older_versions/master/'
@@ -27,6 +28,8 @@ waiting="true"                                          #防止直接进行复�
 
 moveFilelist=[]                                         #被移动文件的集合
 
+copyfile='true'
+
 #print(listDir)
 def day_check(weekday, weekdayDisplay):                 #检测今天日期，防误删
     global iffilemove
@@ -39,25 +42,26 @@ def day_check(weekday, weekdayDisplay):                 #检测今天日期，�
                     if choice1==0:
                         iffilemove='true'
                         waiting="false"
-                    
+
                     if choice1==1:
                         iffilemove='false'
                         waiting="false"
-                    
+
                     if choice1==2:
                         exit()
-            
+
             else:
                 waiting = "false"
         if waiting=="false":
             break
 
-
+Checkdate = day_check(weekday, weekdayDisplay)
 
 #移动
 
 def move_old_file(datetime, moveDir, listDir, moveFilelist):
     global moveFile
+    global copyfile
     datanames = os.listdir(listDir)
 
     for dataname in datanames:
@@ -67,31 +71,35 @@ def move_old_file(datetime, moveDir, listDir, moveFilelist):
             moveFile = os.path.join(moveDir,dataname)
         #print(listFile)
             if listFile == (listDir+str(datetime)+".docx"): #要求名字是今日作业母本
+                copyfile='false'
                 title = g.msgbox(msg="已经存在今日作业母本(错误代码:ERROR#114514)",title="复制作业副本ver3.0:复制失败",ok_button="OK")
                 time.sleep(5)
                 exit()
             else:
                 if iffilemove == 'true':
                     shutil.move(listFile,moveFile)
-                    moveFilelist=moveFilelist.append(moveFile)
-                    
+                    moveFilelist=moveFilelist.append(dataname)
+                    return moveFilelist
+
+
+moveFiles = move_old_file(datetime, moveDir, listDir, moveFilelist)
 
 #复制
 def copy_new_file(datetime, sourceDir, targetDir):
     for files in os.listdir(sourceDir):
         sourceFile = os.path.join(sourceDir,files)   #把文件夹名和文件名称链接起来
-        if os.path.isfile(sourceFile) and sourceFile.find('.docx')>0: #要求是文件且后缀是docx
+        if os.path.isfile(sourceFile) and sourceFile.find('.docx')>0 and copyfile=='true': #要求是文件且后缀是docx
             shutil.copy(sourceDir+"master.docx",targetDir)
             os.rename(targetDir+"master.docx",str(datetime)+".docx")
 
-
+copyFile = copy_new_file(datetime, sourceDir, targetDir)
 
 
 
 def Last(imageDir, moveFile):
     if iffilemove == 'true':
         moveFilelist_str=''.join(moveFilelist)
-        movement = "移动了"+moveFilelist_str+''
+        movement = "移动了"+moveFilelist_str+'\n'
     else:
         movement = '\n'
     choice2=g.ccbox("作者:LSY\n未经作者授权随意转载\n"+movement+"开源是一种美德。",image=imageDir+"successful.png",title="复制作业副本ver3.0:复制成功",choices=("好的","查看使用说明"))
@@ -104,36 +112,34 @@ def Last(imageDir, moveFile):
             exit()
         if choice3 == 1:
             webbrowser.open(mylink, new=0, autoraise=True)
-            
 
-    
+
+
 def main():
-    
-    day_check(weekday, weekdayDisplay)
-    
+
+    Checkdate
+
 
     for listfiles in os.listdir(listDir):
         print(listfiles)
         if listfiles.find('.docx')>0 and iffilemove=="true":
-            move_old_file(datetime, moveDir, listDir, moveFilelist)                      #如果docx数量＞0,则移动旧文件
+            moveFiles()                      #如果docx数量＞0,则移动旧文件
         else:
             iffilemove="false"
-    
-    
-            
-    copy_new_file(datetime, sourceDir, targetDir)
 
     if iffilemove == 'true':
-    
-        Last(imageDir, moveFile)
-    
+
+        LastDisplay = Last(imageDir, moveFile)
+
     if iffilemove == 'false':
         moveFile="\n"
-        Last(imageDir,moveFile)
+        LastDisplay = Last(imageDir,moveFile)
+
+    copyFile
+    LastDisplay
     exit()
-    
-    
+
+
 if __name__ == '__main__':
     main()
-
-    
+    os.system('pause')
