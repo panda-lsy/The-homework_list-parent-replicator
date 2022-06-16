@@ -44,14 +44,21 @@ def backup():                                           #回档
     text="作者:LSY\n未经作者授权随意转载\n开源是一种美德。"
     imagename = "successful"
     def successGUI():                                   #回档成功或失败界面
-        choice2=g.indexbox(text,image=imageDir+imagename+".png",title="复制作业副本ver7.0:回档"+success_state,choices=("好的","查看使用说明"))
-        if choice2 == 0:
+        choice2=g.buttonbox(text,image=imageDir+imagename+".png",title="复制作业副本ver7.1:回档"+success_state,choices=("好的","查看使用说明"))
+        if choice2 == '好的':
             os._exit(0)
-        if choice2 == 1:
-            choice3 = g.indexbox(msg="使用说明：双击本应用即可立刻复制作业母本并设置好今日日期\n复制完毕后你可以再次开启应用回档之前的作业清单。\n待更新内容:\n最终目标:通过Python的QQAPI来进行各个学科群作业关键字自动更新作业。",title="复制作业副本ver7.0:使用说明",choices=("好的","打开本项目的Github网址(你可能需要科学上网)"))
-            if choice3 == 0:
+        if choice2 == '查看使用说明':
+            choice3 = g.buttonbox(msg=
+            '''使用说明：双击本应用即可立刻复制作业母本并设置好今日日期\n复制完毕后你可以再次开启应用回档之前的作业清单。
+            待更新内容:
+            1.设置Json与基础设置
+            2.支持回档多选
+            3.当文件被占用时添加解除占用功能
+            4.通用功能:添加自动安装,自动打包EXE功能
+            ''',title="复制作业副本ver7.1:使用说明",choices=("好的","打开本项目的Github网址(你可能需要科学上网)"))
+            if choice3 == '好的':
                 os._exit(0)
-            if choice3 == 1:
+            if choice3 == '打开本项目的Github网址(你可能需要科学上网)':
                 webbrowser.open(mylink, new=0, autoraise=True)
                 os._exit(0)
     datanamestwo = os.listdir(listDirtwo)
@@ -85,7 +92,7 @@ def day_check(weekday, weekdayDisplay):                 #检测今天日期，�
     while True:
         if waiting =="true":
             if weekday=="Sat" or weekday=="Sun":
-                    choice1=g.indexbox("今天是"+weekdayDisplay+",如果进行作业复制将会自动将旧作业移动到older_versions文件夹",title="复制作业副本ver7.0:防误触",choices=("无视,继续生成","生成,但是不移动旧作业","回档之前的作业清单","我点错了,退出"))
+                    choice1=g.indexbox("今天是"+weekdayDisplay+",如果进行作业复制将会自动将旧作业移动到older_versions文件夹",title="复制作业副本ver7.1:防误触",choices=("无视,继续生成","生成,但是不移动旧作业","回档之前的作业清单","我点错了,退出"))
                     if choice1==0:
                         iffilemove=True
                         waiting="false"
@@ -122,18 +129,24 @@ def move_old_file(datetime, moveDir, listDir, weekday):            #移动和复
     has_txtfile = False
 
     def GUI():
-        choice2=g.indexbox(text,image=imageDir+image_name+".png",title="复制作业副本ver7.0:"+interaction,choices=("好的","查看使用说明","回档之前作业"))
-        if choice2 == 0:
+        choice2=g.buttonbox(text,image=imageDir+image_name+".png",title="复制作业副本ver7.1:"+interaction,choices=("好的","查看使用说明","回档之前作业"))
+        if choice2 == '好的':
                 os._exit(0)
-        if choice2 == 1:
-            choice3 = g.indexbox(msg="使用说明：双击本应用即可立刻复制作业母本并设置好今日日期\n待更新内容:\n最终目标:通过Python的QQAPI来进行各个学科群作业关键字自动更新作业。",title="复制作业副本ver7.0:使用说明",choices=("好的","打开本项目的Github网址(你可能需要科学上网)","回档作业"))
-            if choice3 == 0:
+        if choice2 == "查看使用说明":
+            choice3 = g.buttonbox(msg='''使用说明：双击本应用即可立刻复制作业母本并设置好今日日期\n复制完毕后你可以再次开启应用回档之前的作业清单。
+            待更新内容:
+            1.设置Json与基础设置
+            2.支持回档多选
+            3.当文件被占用时添加解除占用功能
+            4.通用功能:添加自动安装,自动打包EXE功能
+            最终目标:通过Python的QQAPI来进行各个学科群作业关键字自动更新作业。''',title="复制作业副本ver7.1:使用说明",choices=("好的","打开本项目的Github网址(你可能需要科学上网)","回档作业"))
+            if choice3 == "好的":
                 os._exit(0)
-            if choice3 == 1:
+            if choice3 == "打开本项目的Github网址(你可能需要科学上网)":
                 webbrowser.open(mylink, new=0, autoraise=True)
-            if choice3 == 2:
+            if choice3 == "回档作业":
                 backup()
-        if choice2 == 2:
+        if choice2 == "回档之前作业":
             backup()
         os._exit(0)
     #检测是否复制或者移动
